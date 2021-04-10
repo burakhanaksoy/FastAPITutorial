@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 from fastapi import Response
+import pydantic
 
 
 def get_blogs(db: Session):
@@ -39,8 +40,8 @@ def delete_by_id(id: int, response: Response, db: Session):
 def put_blog_post(id: int, request: schemas.CreateBlog, response: Response, db: Session):
     check = db.query(models.Blog).filter(models.Blog.id == id).first()
     if not check == None:
-        db.query(models.Blog).filter(models.Blog.id == id).update({'title':request.title, 'user':request.user,
-                                                                   'likes':request.likes, 'published':request.published})
+        db.query(models.Blog).filter(models.Blog.id == id).update({'title': request.title, 'user': request.user,
+                                                                   'likes': request.likes, 'published': request.published})
         db.commit()
         response.status_code = 200
     else:

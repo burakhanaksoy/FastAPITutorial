@@ -5,6 +5,7 @@ import crud
 import uvicorn as uvicorn
 from database import SessionLocal, engine
 from sqlalchemy.orm import Session
+from typing import List
 
 app = FastAPI()
 
@@ -21,17 +22,17 @@ def get_db():
         db.close()
 
 
-@app.get("/blogs/")
+@app.get("/blogs/", response_model=List[schemas.BlogOut])
 def get_blogs(db: Session = Depends(get_db)):
     return crud.get_blogs(db)
 
 
-@app.post("/blogs/", response_model=schemas.CreateBlog, status_code=201)
+@app.post("/blogs/", status_code=201)
 def create_blog(request: schemas.CreateBlog, db: Session = Depends(get_db)):
     return crud.create_blog(request, db)
 
 
-@app.get("/blogs/{id}", status_code=200)
+@app.get("/blogs/{id}", status_code=200, response_model=schemas.BlogOut)
 def get_blog_by_id(id: int, response: Response, db: Session = Depends(get_db)):
     return crud.get_blog_by_id(id, response, db)
 
