@@ -1,16 +1,11 @@
 from fastapi import FastAPI
-from typing import Optional
 from constants import constants
-from pydantic import BaseModel
+from schemas import schemas
 import uvicorn as uvicorn
 
 app = FastAPI()
 
 
-class Blog(BaseModel):
-    title: str
-    body: str
-    published: Optional[bool]
 
 
 class BlogPost:
@@ -85,7 +80,7 @@ def comments(id: int):
 
 
 @app.post('/blog', status_code=201)
-def create_blog(blog: Blog):
+def create_blog(blog: schemas.Blog):
     return {'data': f'Blog is created with title \'{blog.title}\''}
 
 # if __name__ == '__main__':
